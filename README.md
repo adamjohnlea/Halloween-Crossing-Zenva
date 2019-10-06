@@ -16,10 +16,10 @@ All game assests were purchaseeed from [itch.io](https://itch.io) .
 Please replace all images, sounds, etc., with your own if you use this project. Thank you.
 
 ## Future Improvements/Changes
-~Change starting and ending position of ghost~
-~Change starting position of hero~
-Load random ghosts
-Add music
-Add sound effects
-Add sprite walking animation for hero
-Add reward animation for reaching jack-o-laterns
+1. ~ Change starting and ending position of ghost~
+2. ~ Change starting position of hero~
+3. Load random ghosts
+4. Add music
+5. Add sound effects
+6. Add sprite walking animation for hero
+7. Add reward animation for reaching jack-o-laterns
