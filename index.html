@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=0, initial-scale=1, maximum-scale=1, width=device-width, minimal-ui=1"> 
+    <title>Zenva Intro</title>
+    <style>
+        canvas {border: 1px solid black; background-color: red;}
+    </style>
+    </head>
+    <body>
+        <div id="phaser-game">
+            <canvas width="1000" height="500" id="myCanvas"></canvas>
+        </div>
+        <script src="/assets/lib/phaser.js" charset="utf-8"></script>
+        <script>
+            var gameLive = true;
+            var sprites = {};
+            var topEdge = 50;
+            var bottomEdge = 400;
+            var length = 50;
+            var rectangleColor = "rgb(0, 0, 255)";
+
+            var loadSprites = function() {
+                sprites.player = new Image();
+                sprites.player.src = '/assets/images/hero.png';
+
+                sprites.background = new Image();
+                sprites.background.src = '/assets/images/background.png';
+
+                sprites.enemy = new Image();
+                sprites.enemy.src = '/assets/images/enemy.png';
+
+                sprites.goal = new Image();
+                sprites.goal.src = '/assets/images/goal.png';
+            }
+
+            var checkCollision = function(rect1, rect2) {
+                var xOverlap = Math.abs(rect1.x - rect2.x) <= length;
+                var yOverlap = Math.abs(rect1.y - rect2.y) <= length;
+                return xOverlap && yOverlap;
+            };
+
+            var rectangles = [
+                {
+                    x: 300,
+                    y: 50,
+                    speed: 1,
+                },
+                {
+                    x: 550,
+                    y: 50,
+                    speed: 2,
+                },
+                {
+                    x: 800,
+                    y: 50,
+                    speed: 3,
+                },
+            ]
+
+            var player = {
+                x: 50,
+                y: 350,
+                maxSpeed: 2,
+                currentSpeed: 0,
+                color: "rgb(0, 255, 0)",
+            };
+
+            var canvas = document.getElementById("myCanvas");
+            var ctx    = canvas.getContext("2d");
+
+            document.onkeydown = function(event){
+                if(event.keyCode == 39) {
+                    player.currentSpeed = player.maxSpeed;
+                } else if(event.keyCode == 37) {
+                    player.currentSpeed = -player.maxSpeed;
+                }
+            };
+
+            document.onkeyup = function(event) {
+                player.currentSpeed = 0;
+            };
+
+            var updatePlayer = function() {
+                player.x += player.currentSpeed;
+            }
+
+            var update = function() {
+                rectangles.forEach(function(element, index) {
+                    if(checkCollision(player, element)){
+                        gameOverLogic();
+                    }
+                    if (element.y > bottomEdge || element.y < topEdge) {
+                        element.speed = -element.speed;
+                    }
+                    element.y += element.speed;
+                });
+            };
+
+            var draw = function() {
+                ctx.clearRect(0,0,1000,500)
+                ctx.fillStyle = rectangleColor;
+                ctx.drawImage(sprites.background, 0, 0);
+                ctx.drawImage(sprites.goal, 930, 372);
+                ctx.drawImage(sprites.player, player.x, player.y);
+                rectangles.forEach(function(element, index) {
+                    ctx.drawImage(sprites.enemy, element.x, element.y);
+                });
+            };
+
+            var gameOverLogic = function() {
+                gameLive = false;
+                alert('Game over!');
+                window.location = "";
+            }
+
+            var step = function() {
+                update();
+                updatePlayer();
+                draw();
+                //drawPlayer();
+                if(gameLive) {
+                    window.requestAnimationFrame(step);
+                }
+                
+            };
+            loadSprites();
+            step();
+
+            
+        </script> 
+    </body>
+</html>
